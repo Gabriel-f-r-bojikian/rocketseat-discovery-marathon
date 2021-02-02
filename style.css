@@ -5,6 +5,10 @@
     --green: #49aa26;
     --light-green: #3dd705;
     --red: #e92929;
+    --platinum: #EAE6E5;
+    --background-white: #F0F2F5;
+    --background-dark: #021329;
+    --background-darker: #011627;
 }
 
 * {
@@ -19,7 +23,12 @@ html {
 }
 
 body {
-    background: #F0F2F5;
+    background: var(--background-white);
+    font-family: 'Poppins', sans-serif;
+}
+
+body.dark {
+    background: var(--background-dark);
     font-family: 'Poppins', sans-serif;
 }
 
@@ -99,6 +108,25 @@ button:hover {
     opacity: 1;
 }
 
+.dark-mode {
+    max-width: 10em;
+    background-color: rgba(0,0,0,0);
+    
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5em;
+    padding-left: 5em;
+}
+
+.dark-mode:hover {
+    background-color: rgba(0,0,0,0);
+    opacity: 0.7;
+}
+
+.dark-mode img {
+    max-width: 2.4rem;
+}
+
 /* Header ========================== */
 header {
     background: var(--dark-green);
@@ -127,8 +155,23 @@ header {
     border-radius: .25rem;
     margin-bottom: 2rem;
 
+    overflow-x: auto;
+
     color: var(--dark-blue);
 }
+
+.card.dark {
+    background: var(--background-darker);
+    border: 1px solid var(--platinum);
+    padding: 1.5rem 2rem;
+    border-radius: .25rem;
+    margin-bottom: 2rem;
+
+    overflow-x: auto;
+
+    color: var(--platinum);
+}
+
 
 .card h3 {
     font-weight: normal;
@@ -236,7 +279,14 @@ td.expense {
 }
 
 .modal {
-    background: #F0F2F5;
+    background: var(--background-white);
+    padding: 2.4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.modal.dark {
+    background: var(--background-dark);
     padding: 2.4rem;
     position: relative;
     z-index: 1;
