@@ -211,8 +211,32 @@ const Form = {
   },
 }
 
+let darkMode = false;
+
+function darkModeToggleCards() {
+  const cards = document.getElementsByClassName("card");
+  
+  cards[0].classList.toggle("dark");
+  cards[1].classList.toggle("dark");
+}
+
+function darkModeToggleButtonImage() {
+  if(darkMode === true) {
+    document.getElementById("dark-mode-button").src = "./assets/brightness.svg";
+  } else {
+    document.getElementById("dark-mode-button").src = "./assets/night-mode.svg";
+  }
+}
+
 function darkModeToggle() {
+  if (darkMode === true) {
+    darkMode = false;
+  } else {
+    darkMode = true;
+  }
   document.body.classList.toggle("dark");
+  darkModeToggleCards();
+  darkModeToggleButtonImage();
 }
 
 const App = {

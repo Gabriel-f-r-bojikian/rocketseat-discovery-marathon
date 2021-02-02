@@ -7,7 +7,8 @@
     --red: #e92929;
     --platinum: #EAE6E5;
     --background-white: #F0F2F5;
-    --background-dark: #011627
+    --background-dark: #021329;
+    --background-darker: #011627;
 }
 
 * {
@@ -154,8 +155,23 @@ header {
     border-radius: .25rem;
     margin-bottom: 2rem;
 
+    overflow-x: auto;
+
     color: var(--dark-blue);
 }
+
+.card.dark {
+    background: var(--background-darker);
+    border: 1px solid var(--platinum);
+    padding: 1.5rem 2rem;
+    border-radius: .25rem;
+    margin-bottom: 2rem;
+
+    overflow-x: auto;
+
+    color: var(--platinum);
+}
+
 
 .card h3 {
     font-weight: normal;
@@ -264,6 +280,13 @@ td.expense {
 
 .modal {
     background: var(--background-white);
+    padding: 2.4rem;
+    position: relative;
+    z-index: 1;
+}
+
+.modal.dark {
+    background: var(--background-dark);
     padding: 2.4rem;
     position: relative;
     z-index: 1;
