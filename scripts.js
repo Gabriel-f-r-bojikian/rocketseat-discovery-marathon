@@ -211,6 +211,10 @@ const Form = {
   },
 }
 
+function darkModeToggle() {
+  document.body.classList.toggle("dark");
+}
+
 const App = {
   init() {
     
