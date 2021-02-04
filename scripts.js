@@ -61,11 +61,15 @@ const Transaction = {
   },
 
   searchIndex(transaction) {
+    // Look for transaction in the list
     for(let i = 0; i < Transaction.all.length; i++){
       if(Transaction.all[i].description === transaction.description){
         return i;
       }
     }
+    // If doesn't exists
+    throw new Error("Transação não encontrada, veja se o nome está correto");
+
   },
 
   update(transaction) {
