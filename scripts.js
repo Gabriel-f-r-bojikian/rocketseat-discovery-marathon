@@ -6,13 +6,27 @@ const Modal = {
       .classList
       .toggle('active');
   },
-  toggleEdit(transactionToBeDisplayed) {  
+  openEdit(index) {  
+    // Display on the input places the values of the transaction to be edited
+    document.querySelector('input#description-update').value = Transaction.all[index].description;
+
+    document.querySelector('input#amount-update').value = Transaction.all[index].amount/100;
+
+    document.querySelector('input#date-update').value = Utils.formatDateBack(Transaction.all[index].date);
+    
     // Alternate model between active and inactive
     document
       .querySelector('.modal-overlay-edit')
       .classList
       .toggle('active');
-},
+  },
+
+  closeEdit() {
+    document
+      .querySelector('.modal-overlay-edit')
+      .classList
+      .toggle('active');
+  }
 
 }
 
@@ -118,7 +132,7 @@ const DOM = {
 
     const amount = Utils.formatCurrency(transaction.amount);
     const html = `
-    <td class="edit"><a href="#" onclick="Modal.toggleEdit()" class="button new">Edit</a></td>
+    <td class="edit"><a href="#" onclick="Modal.openEdit(${index})" class="button new">Edit</a></td>
     <td class="description">${transaction.description}</td>
     <td class="${CSSclass}">${amount}</td>
     <td class="date">${transaction.date}</td>
@@ -141,7 +155,7 @@ const DOM = {
   },
   clearTransactions() {
     DOM.transactionsContainer.innerHTML = "";
-  }
+  },
 }
 
 const Utils = {
@@ -151,8 +165,15 @@ const Utils = {
   },
 
   formatDate(value){
+    // Parses and formats the date string received from the form to the dd/mm/yyyy format
     const splittedDate = value.split("-");
     return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`;
+  },
+
+  formatDateBack(value){
+    // Parses and formats the date string from dd/mm/yyyy back to yyyy-mm-dd format
+    const splittedDate = value.split("/");
+    return `${splittedDate[2]}-${splittedDate[1]}-${splittedDate[0]}`;
   },
 
   formatCurrency(value){
@@ -272,7 +293,7 @@ const Form = {
       // Apagar os dados do formulário
       Form.clearEditFields();
       // Fechar modal
-      Modal.toggleEdit();
+      Modal.closeEdit();
       // Atualizar a aplicação
       App.reload();
     } catch (error) {
