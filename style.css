@@ -254,7 +254,8 @@ td.expense {
 }
 
 /* Modal =========================== */
-.modal-overlay {
+.modal-overlay,
+.modal-overlay-edit {
     width: 100%;
     height: 100%;
 
@@ -273,7 +274,8 @@ td.expense {
     z-index: 999;
 }
 
-.modal-overlay.active {
+.modal-overlay.active,
+.modal-overlay-edit.active {
     opacity: 1;
     visibility: visible;
 }

@@ -1,11 +1,33 @@
 const Modal = {
   toggle() {
-      // Alternate model between active and inactive
-      document
-        .querySelector('.modal-overlay')
-        .classList
-        .toggle('active');
+    // Alternate model between active and inactive
+    document
+      .querySelector('.modal-overlay')
+      .classList
+      .toggle('active');
+  },
+  openEdit(index) {  
+    // Display on the input places the values of the transaction to be edited
+    document.querySelector('input#description-update').value = Transaction.all[index].description;
+
+    document.querySelector('input#amount-update').value = Transaction.all[index].amount/100;
+
+    document.querySelector('input#date-update').value = Utils.formatDateBack(Transaction.all[index].date);
+    
+    // Alternate model between active and inactive
+    document
+      .querySelector('.modal-overlay-edit')
+      .classList
+      .toggle('active');
+  },
+
+  closeEdit() {
+    document
+      .querySelector('.modal-overlay-edit')
+      .classList
+      .toggle('active');
   }
+
 }
 
 const transactions = [
@@ -52,6 +74,24 @@ const Transaction = {
     App.reload();
   },
 
+  searchIndex(transaction) {
+    // Look for transaction in the list
+    for(let i = 0; i < Transaction.all.length; i++){
+      if(Transaction.all[i].description === transaction.description){
+        return i;
+      }
+    }
+    // If doesn't exists
+    throw new Error("Transação não encontrada, veja se o nome está correto");
+
+  },
+
+  update(transaction) {
+    const index = Transaction.searchIndex(transaction);
+    Transaction.all[index] = transaction;
+    App.reload();
+  },
+
   incomes() {
     let income = 0
     Transaction.all.forEach((transaction) => {
@@ -74,7 +114,7 @@ const Transaction = {
 
   total() {
     return Transaction.incomes() + Transaction.expenses();
-  }
+  },
 }
 
 const DOM = {
@@ -92,6 +132,7 @@ const DOM = {
 
     const amount = Utils.formatCurrency(transaction.amount);
     const html = `
+    <td class="edit"><a href="#" onclick="Modal.openEdit(${index})" class="button new">Editar</a></td>
     <td class="description">${transaction.description}</td>
     <td class="${CSSclass}">${amount}</td>
     <td class="date">${transaction.date}</td>
@@ -114,7 +155,7 @@ const DOM = {
   },
   clearTransactions() {
     DOM.transactionsContainer.innerHTML = "";
-  }
+  },
 }
 
 const Utils = {
@@ -124,8 +165,15 @@ const Utils = {
   },
 
   formatDate(value){
+    // Parses and formats the date string received from the form to the dd/mm/yyyy format
     const splittedDate = value.split("-");
     return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`;
+  },
+
+  formatDateBack(value){
+    // Parses and formats the date string from dd/mm/yyyy back to yyyy-mm-dd format
+    const splittedDate = value.split("/");
+    return `${splittedDate[2]}-${splittedDate[1]}-${splittedDate[0]}`;
   },
 
   formatCurrency(value){
@@ -157,17 +205,13 @@ const Form = {
     }
   },
 
-  validateFields(){
-    const { description, amount, date } = Form.getValues();
-
+  validateFields(description, amount, date){
     if(description.trim() === "" || amount.trim() === "" || date.trim() === ""){
       throw new Error("Por favor, preencha todos os campos");
     }
   },
 
-  formatValues(){
-    let { description, amount, date } = Form.getValues();
-
+  formatValues(description, amount, date){
     amount = Utils.formatAmount(amount);
     date = Utils.formatDate(date);
 
@@ -182,10 +226,20 @@ const Form = {
     Transaction.add(transaction);
   },
 
+  updateTransaction(transaction) {
+    Transaction.update(transaction);
+  },
+
   clearFields(){
-    Form.description.value = "";
-    Form.amount.value = "";
-    Form.date.value = "";
+    document.querySelector('input#description').value = "";
+    document.querySelector('input#amount').value = "";
+    document.querySelector('input#date').value = "";
+  },
+
+  clearEditFields(){
+    document.querySelector('input#description-update').value = "";
+    document.querySelector('input#amount-update').value = "";
+    document.querySelector('input#date-update').value = "";
   },
 
   submit(event){
@@ -193,15 +247,53 @@ const Form = {
 
     try {
       // Verificar se informações foram preenchidas
-      Form.validateFields();
+      Form.validateFields(
+        document.querySelector('input#description').value,
+        document.querySelector('input#amount').value,
+        document.querySelector('input#date').value
+      );
       // Formatar os dados para salvar
-      const transaction = Form.formatValues();
+      const transaction = Form.formatValues(
+        document.querySelector('input#description').value,
+        document.querySelector('input#amount').value,
+        document.querySelector('input#date').value
+      );
       // Salvar
       Form.saveTransaction(transaction);
       // Apagar os dados do formulário
       Form.clearFields();
       // Fechar modal
       Modal.toggle();
+      // Atualizar a aplicação
+      App.reload();
+    } catch (error) {
+      alert(error.message);
+    }
+
+  },
+
+  update(event){
+    event.preventDefault();
+
+    try {
+      // Verificar se informações foram preenchidas
+      Form.validateFields(
+        document.querySelector('input#description-update').value,
+        document.querySelector('input#amount-update').value,
+        document.querySelector('input#date-update').value
+      );
+      // Formatar os dados para salvar
+      const transaction = Form.formatValues(
+        document.querySelector('input#description-update').value,
+        document.querySelector('input#amount-update').value,
+        document.querySelector('input#date-update').value
+      );
+      // Salvar
+      Form.updateTransaction(transaction);
+      // Apagar os dados do formulário
+      Form.clearEditFields();
+      // Fechar modal
+      Modal.closeEdit();
       // Atualizar a aplicação
       App.reload();
     } catch (error) {
