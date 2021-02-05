@@ -132,7 +132,7 @@ const DOM = {
 
     const amount = Utils.formatCurrency(transaction.amount);
     const html = `
-    <td class="edit"><a href="#" onclick="Modal.openEdit(${index})" class="button new">Edit</a></td>
+    <td class="edit"><a href="#" onclick="Modal.openEdit(${index})" class="button new">Editar</a></td>
     <td class="description">${transaction.description}</td>
     <td class="${CSSclass}">${amount}</td>
     <td class="date">${transaction.date}</td>
